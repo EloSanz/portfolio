@@ -1,15 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { ExternalLink, Code2, Database, LayoutTemplate, Server, GitBranch, Terminal, Sparkles, GraduationCap, Kanban } from "lucide-react";
+import { ExternalLink, Code2, Database, LayoutTemplate, Server, GitBranch, Terminal, Sparkles, GraduationCap, Kanban, BookOpen, Rocket } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { projects } from "@/data/projects";
-import { experiences } from "@/data/experience";
+import { projectsES, projectsEN } from "@/data/projects";
+import { experiencesES, experiencesEN } from "@/data/experience";
 import { FaGithub, FaLinkedin, FaYoutube, FaJava, FaLinux, FaAws } from "react-icons/fa";
 import { SiPostgresql, SiMongodb, SiRedis, SiApachekafka, SiSpringboot, SiPython, SiDocker, SiNodedotjs, SiTypescript, SiPrisma, SiNginx, SiAngular, SiDatadog, SiGrafana } from "react-icons/si";
+import { contentES } from "@/data/content-es";
+import { contentEN } from "@/data/content-en";
 
 const getSkillIcon = (skill: string) => {
   const s = skill.toLowerCase();
@@ -38,8 +41,29 @@ const getSkillIcon = (skill: string) => {
 };
 
 export default function Home() {
+  const [lang, setLang] = useState<"es" | "en">("es");
+  const content = lang === "es" ? contentES : contentEN;
+  const projects = lang === "es" ? projectsES : projectsEN;
+  const experiences = lang === "es" ? experiencesES : experiencesEN;
+
   return (
     <>
+      {/* ================= LANGUAGE SWITCH ================= */}
+      <div className="fixed top-6 right-6 z-50 flex items-center bg-zinc-900 border border-zinc-800 rounded-full p-1 shadow-2xl backdrop-blur-md">
+        <button 
+          onClick={() => setLang("es")}
+          className={`px-3 py-1 rounded-full text-xs font-mono transition-all duration-300 ${lang === "es" ? "bg-yellow-500 text-zinc-950 font-bold" : "text-zinc-500 hover:text-zinc-300"}`}
+        >
+          ES
+        </button>
+        <button 
+          onClick={() => setLang("en")}
+          className={`px-3 py-1 rounded-full text-xs font-mono transition-all duration-300 ${lang === "en" ? "bg-yellow-500 text-zinc-950 font-bold" : "text-zinc-500 hover:text-zinc-300"}`}
+        >
+          EN
+        </button>
+      </div>
+
       {/* ================= HERO BENTO GRID ================= */}
       <section id="about" className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-[auto_auto] gap-4">
 
@@ -48,14 +72,14 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
           <div className="relative z-10 w-full">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              Hola, soy <span className="text-yellow-500">Eliseo Tomás Sanz</span>.
+              {content.hero.greeting} <span className="text-yellow-500">{content.hero.name}</span>.
             </h1>
             <p className="text-lg text-zinc-400 max-w-lg mb-6 leading-relaxed">
-              Backend Software Developer en <strong className="text-zinc-100">Mercado Libre</strong>. Desarrollador apasionado con una sólida formación en sistemas backend de alto rendimiento orientados al producto real.
+              {content.hero.roleDescription} <strong className="text-zinc-100">{content.hero.company}</strong>. {content.hero.description}
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <Link href="#projects" className={buttonVariants({ variant: "default", className: "bg-yellow-500 text-zinc-950 hover:bg-yellow-400 font-semibold border-none" })}>
-                Ver Proyectos
+                {content.hero.viewProjects}
               </Link>
               <a href="https://github.com/EloSanz/" target="_blank" rel="noopener noreferrer" aria-label="Github Profile" className={buttonVariants({ variant: "outline", size: "icon", className: "border-zinc-700 bg-zinc-900 text-zinc-300 hover:text-yellow-400 hover:border-yellow-500/50" })}>
                 <FaGithub className="w-5 h-5" />
@@ -83,12 +107,13 @@ export default function Home() {
         <div className="rounded-3xl bg-zinc-900 border border-zinc-800/60 p-6 flex flex-col justify-center font-mono hover:border-yellow-500/30 transition-colors group">
           <span className="text-yellow-500 mb-2 group-hover:scale-110 transition-transform origin-left"><Terminal className="w-5 h-5" /></span>
           <span className="text-3xl font-bold text-zinc-100">+3</span>
-          <span className="text-sm text-zinc-500 uppercase tracking-widest mt-1">Años Exp.</span>
+          <span className="text-sm text-zinc-500 uppercase tracking-widest mt-1">{content.hero.stats.experienceLabel}</span>
         </div>
         <div className="rounded-3xl bg-zinc-900 border border-zinc-800/60 p-6 flex flex-col justify-center font-mono hover:border-yellow-500/30 transition-colors group">
           <span className="text-yellow-500 mb-2 group-hover:scale-110 transition-transform origin-left"><GitBranch className="w-5 h-5" /></span>
-          <span className="text-3xl font-bold text-zinc-100">+40</span>
-          <span className="text-sm text-zinc-500 uppercase tracking-widest mt-1">Materias UNLaM</span>
+          <span className="text-3xl font-bold text-zinc-100">{content.hero.stats.subjectsNumber}</span>
+          <span className="text-sm text-zinc-500 uppercase tracking-widest mt-1">{content.hero.stats.subjectsLabel}</span>
+          <span className="text-xs text-zinc-600 mt-0.5">{content.hero.stats.subjectsSublabel}</span>
         </div>
 
       </section>
@@ -96,9 +121,9 @@ export default function Home() {
       {/* ================= EXPERIENCIA TÉCNICA ================= */}
       <section id="experience" className="space-y-8">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Experiencia Profesional</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{content.experience.title}</h2>
           <p className="text-zinc-400 mt-2 font-mono text-sm border-l-2 border-yellow-500 pl-4 py-1">
-            Enfoque técnico: Sistemas altamente disponibles, Serverless e Integración de IA.
+            {content.experience.subtitle}
           </p>
         </div>
         <div className="relative border-l border-zinc-800 ml-4 space-y-12">
@@ -139,7 +164,7 @@ export default function Home() {
                   <summary className="p-3 text-sm font-medium text-zinc-300 cursor-pointer list-none flex items-center justify-between hover:bg-zinc-800/50 transition-colors focus:outline-none">
                     <span className="flex items-center gap-2">
                       <Terminal className="w-4 h-4 text-yellow-500" />
-                      Profundizar rol e impacto de negocio
+                      {content.experience.expandDetails}
                     </span>
                     <span className="text-yellow-500 transition-transform duration-300 group-open/details:rotate-180">
                       ↓
@@ -161,8 +186,8 @@ export default function Home() {
       {/* ================= PROYECTOS (CASE STUDIES) ================= */}
       <section id="projects" className="space-y-8">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Proyectos Destacados</h2>
-          <p className="text-zinc-400 mt-2 font-mono text-sm">Desarrollos personales y herramientas de impacto.</p>
+          <h2 className="text-3xl font-bold tracking-tight">{content.projects.title}</h2>
+          <p className="text-zinc-400 mt-2 font-mono text-sm">{content.projects.subtitle}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {projects.map((project, idx) => (
@@ -208,11 +233,11 @@ export default function Home() {
               <CardFooter className="mt-auto">
                 {project.url ? (
                   <a href={project.url} target="_blank" rel="noopener noreferrer" className={buttonVariants({ variant: "outline", className: "w-full border-zinc-700 text-zinc-300 hover:text-yellow-400 hover:border-yellow-500/50 bg-transparent flex items-center justify-center gap-2" })}>
-                    Visitar Proyecto <ExternalLink className="w-4 h-4" />
+                    {content.projects.visitProject} <ExternalLink className="w-4 h-4" />
                   </a>
                 ) : (
                   <Link href={`/projects/${project.slug}`} className={buttonVariants({ variant: "outline", className: "w-full border-zinc-700 text-zinc-300 hover:text-yellow-400 hover:border-yellow-500/50 bg-transparent" })}>
-                    Deep Dive Técnico
+                    {content.projects.deepDive}
                   </Link>
                 )}
               </CardFooter>
@@ -223,15 +248,15 @@ export default function Home() {
 
       {/* ================= TECH STACK & TOOLS ================= */}
       <section className="space-y-8 pb-12">
-        <h2 className="text-3xl font-bold tracking-tight">Especialidad Tech</h2>
+        <h2 className="text-3xl font-bold tracking-tight">{content.techStack.title}</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 
           {/* Main Languages */}
           <div className="rounded-2xl border border-zinc-800/60 p-6 flex flex-col items-center gap-4 bg-zinc-900/30 hover:bg-zinc-900 hover:border-yellow-500/30 transition-colors group">
             <Code2 className="w-8 h-8 text-yellow-500 group-hover:scale-110 transition-transform" />
             <div className="text-center">
-              <div className="font-mono text-sm font-bold text-zinc-300 group-hover:text-yellow-400 transition-colors">Lenguajes</div>
-              <div className="text-xs text-zinc-500 mt-1">Java, TypeScript, Python</div>
+              <div className="font-mono text-sm font-bold text-zinc-300 group-hover:text-yellow-400 transition-colors">{content.techStack.languages}</div>
+              <div className="text-xs text-zinc-500 mt-1">{content.techStack.languagesSub}</div>
             </div>
           </div>
 
@@ -239,8 +264,8 @@ export default function Home() {
           <div className="rounded-2xl border border-zinc-800/60 p-6 flex flex-col items-center gap-4 bg-zinc-900/30 hover:bg-zinc-900 hover:border-yellow-500/30 transition-colors group">
             <Server className="w-8 h-8 text-yellow-500 group-hover:scale-110 transition-transform" />
             <div className="text-center">
-              <div className="font-mono text-sm font-bold text-zinc-300 group-hover:text-yellow-400 transition-colors">Infra</div>
-              <div className="text-xs text-zinc-500 mt-1">Docker, AWS Lambda, Nginx</div>
+              <div className="font-mono text-sm font-bold text-zinc-300 group-hover:text-yellow-400 transition-colors">{content.techStack.infra}</div>
+              <div className="text-xs text-zinc-500 mt-1">{content.techStack.infraSub}</div>
             </div>
           </div>
 
@@ -248,8 +273,8 @@ export default function Home() {
           <div className="rounded-2xl border border-zinc-800/60 p-6 flex flex-col items-center gap-4 bg-zinc-900/30 hover:bg-zinc-900 hover:border-yellow-500/30 transition-colors group">
             <Database className="w-8 h-8 text-yellow-500 group-hover:scale-110 transition-transform" />
             <div className="text-center">
-              <div className="font-mono text-sm font-bold text-zinc-300 group-hover:text-yellow-400 transition-colors">Data & Cola</div>
-              <div className="text-xs text-zinc-500 mt-1">PostgreSQL, Redis, Kafka</div>
+              <div className="font-mono text-sm font-bold text-zinc-300 group-hover:text-yellow-400 transition-colors">{content.techStack.data}</div>
+              <div className="text-xs text-zinc-500 mt-1">{content.techStack.dataSub}</div>
             </div>
           </div>
 
@@ -257,8 +282,8 @@ export default function Home() {
           <div className="rounded-2xl border border-zinc-800/60 p-6 flex flex-col items-center gap-4 bg-zinc-900/30 hover:bg-zinc-900 hover:border-yellow-500/30 transition-colors group">
             <LayoutTemplate className="w-8 h-8 text-yellow-500 group-hover:scale-110 transition-transform" />
             <div className="text-center">
-              <div className="font-mono text-sm font-bold text-zinc-300 group-hover:text-yellow-400 transition-colors">Frameworks / Ecosistema</div>
-              <div className="text-xs text-zinc-500 mt-1">Spring Boot, Next.js, FastMCP</div>
+              <div className="font-mono text-sm font-bold text-zinc-300 group-hover:text-yellow-400 transition-colors">{content.techStack.frameworks}</div>
+              <div className="text-xs text-zinc-500 mt-1">{content.techStack.frameworksSub}</div>
             </div>
           </div>
 
@@ -268,9 +293,9 @@ export default function Home() {
       {/* ================= ABOUT ME ================= */}
       <section id="about-me" className="space-y-8 pb-12 border-t border-zinc-800/60 pt-12">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Sobre Mí & Comunidad</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{content.about.title}</h2>
           <p className="text-zinc-400 mt-2 font-mono text-sm border-l-2 border-yellow-500 pl-4 py-1">
-            Más allá del código: IA, Automatización y Educación.
+            {content.about.subtitle}
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -284,10 +309,10 @@ export default function Home() {
               <div className="p-3 rounded-xl bg-zinc-800/50 border border-zinc-700/50">
                 <Sparkles className="w-6 h-6 text-yellow-500" />
               </div>
-              <h3 className="text-xl font-bold text-zinc-100">Pasión por la IA</h3>
+              <h3 className="text-xl font-bold text-zinc-100">{content.about.cards.ai.title}</h3>
             </div>
             <p className="text-zinc-400 leading-relaxed relative z-10">
-              En mi día a día trabajo constantemente resolviendo problemas complejos utilizando LLMs como Claude y Gemini. Me encanta iterar distintos modelos, crear <strong className="text-zinc-300">Servidores MCP</strong> a medida, integrar flujos de tipo <strong className="text-zinc-300">RAG</strong> y desarrollar frameworks orientados a agentes autónomos empleando Python.
+              {content.about.cards.ai.description}
             </p>
           </div>
 
@@ -300,16 +325,48 @@ export default function Home() {
               <div className="p-3 rounded-xl bg-zinc-800/50 border border-zinc-700/50">
                 <GraduationCap className="w-6 h-6 text-yellow-500" />
               </div>
-              <h3 className="text-xl font-bold text-zinc-100">Team Player & Mentoring</h3>
+              <h3 className="text-xl font-bold text-zinc-100">{content.about.cards.mentoring.title}</h3>
             </div>
             <p className="text-zinc-400 leading-relaxed relative z-10">
-              Fui mentor en materias de programación universitarias (UNLaM), ayudando a múltiples estudiantes a sentar bases sólidas en algoritmos y estructuras de datos. Además, comparto material educativo en mi canal de YouTube, donde explico código en alto y bajo nivel como C.
+              {content.about.cards.mentoring.description}
             </p>
             <div className="mt-auto pt-4 relative z-10">
               <a href="https://www.youtube.com/@Doc1703_" target="_blank" rel="noopener noreferrer" className={buttonVariants({ variant: "outline", className: "w-fit border-zinc-700 text-zinc-300 hover:text-red-500 hover:border-red-500/50 bg-zinc-900 flex items-center gap-2 transition-colors" })}>
-                <FaYoutube className="w-5 h-5" /> Visitar Canal
+                <FaYoutube className="w-5 h-5" /> {content.about.cards.mentoring.action}
               </a>
             </div>
+          </div>
+
+          {/* Academic Background */}
+          <div className="md:col-span-2 rounded-3xl bg-zinc-900/40 border border-zinc-800/60 p-8 flex flex-col gap-4 relative overflow-hidden group hover:bg-zinc-900/80 transition-all duration-300 hover:border-yellow-500/30">
+            <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+              <BookOpen className="w-24 h-24 text-yellow-500" />
+            </div>
+            <div className="flex items-center gap-3 relative z-10">
+              <div className="p-3 rounded-xl bg-zinc-800/50 border border-zinc-700/50">
+                <BookOpen className="w-6 h-6 text-yellow-500" />
+              </div>
+              <h3 className="text-xl font-bold text-zinc-100">{content.about.cards.academic.title}</h3>
+            </div>
+            <p className="text-zinc-400 leading-relaxed relative z-10 md:max-w-4xl font-medium">
+              {content.about.cards.academic.description}
+            </p>
+          </div>
+
+          {/* Currently Learning */}
+          <div className="md:col-span-2 rounded-3xl bg-zinc-900/40 border border-zinc-800/60 p-8 flex flex-col gap-4 relative overflow-hidden group hover:bg-zinc-900/80 transition-all duration-300 hover:border-yellow-500/30">
+            <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Rocket className="w-24 h-24 text-yellow-500" />
+            </div>
+            <div className="flex items-center gap-3 relative z-10">
+              <div className="p-3 rounded-xl bg-zinc-800/50 border border-zinc-700/50">
+                <Rocket className="w-6 h-6 text-yellow-500" />
+              </div>
+              <h3 className="text-xl font-bold text-zinc-100">{content.about.cards.learning.title}</h3>
+            </div>
+            <p className="text-zinc-400 leading-relaxed relative z-10 md:max-w-4xl font-medium">
+              {content.about.cards.learning.description}
+            </p>
           </div>
 
         </div>
