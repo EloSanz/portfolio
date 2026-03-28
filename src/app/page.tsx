@@ -50,13 +50,13 @@ export default function Home() {
     <>
       {/* ================= LANGUAGE SWITCH ================= */}
       <div className="fixed top-6 right-6 z-50 flex items-center bg-zinc-900 border border-zinc-800 rounded-full p-1 shadow-2xl backdrop-blur-md">
-        <button 
+        <button
           onClick={() => setLang("es")}
           className={`px-3 py-1 rounded-full text-xs font-mono transition-all duration-300 ${lang === "es" ? "bg-yellow-500 text-zinc-950 font-bold" : "text-zinc-500 hover:text-zinc-300"}`}
         >
           ES
         </button>
-        <button 
+        <button
           onClick={() => setLang("en")}
           className={`px-3 py-1 rounded-full text-xs font-mono transition-all duration-300 ${lang === "en" ? "bg-yellow-500 text-zinc-950 font-bold" : "text-zinc-500 hover:text-zinc-300"}`}
         >
@@ -68,8 +68,22 @@ export default function Home() {
       <section id="about" className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-[auto_auto] gap-4">
 
         {/* Celda Principal: Saludo */}
-        <div className="md:col-span-2 md:row-span-1 rounded-3xl bg-zinc-900 border border-zinc-800/60 p-8 flex flex-col justify-center relative overflow-hidden group hover:border-zinc-700 transition-colors">
-          <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <div className="md:col-span-2 md:row-span-1 rounded-3xl bg-zinc-900 border border-zinc-800/60 p-8 flex flex-col justify-center relative overflow-hidden group hover:border-zinc-700 transition-all duration-500">
+
+          {/* Mac Background Setup */}
+          <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-opacity duration-700 pointer-events-none">
+            <Image
+              src="/macs.jpeg"
+              alt="Macs Setup"
+              fill
+              className="object-cover object-bottom grayscale"
+              priority
+            />
+          </div>
+          {/* Gradient Overlay for Text Legibility */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-r from-zinc-950 via-zinc-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          <div className="absolute inset-0 z-0 bg-gradient-to-br from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
           <div className="relative z-10 w-full">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
               {content.hero.greeting} <span className="text-yellow-500">{content.hero.name}</span>.
@@ -104,16 +118,37 @@ export default function Home() {
         </div>
 
         {/* Celdas pequeñas: Core Stats (Estilo Ingeniero / Consola) */}
-        <div className="rounded-3xl bg-zinc-900 border border-zinc-800/60 p-6 flex flex-col justify-center font-mono hover:border-yellow-500/30 transition-colors group">
-          <span className="text-yellow-500 mb-2 group-hover:scale-110 transition-transform origin-left"><Terminal className="w-5 h-5" /></span>
-          <span className="text-3xl font-bold text-zinc-100">+3</span>
-          <span className="text-sm text-zinc-500 uppercase tracking-widest mt-1">{content.hero.stats.experienceLabel}</span>
+        <div className="rounded-3xl bg-zinc-900 border border-zinc-800/60 p-6 flex flex-col justify-center font-mono hover:border-yellow-500/30 transition-all duration-500 group relative overflow-hidden">
+
+          {/* Mac Background Setup */}
+          <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-opacity duration-700 pointer-events-none">
+            <Image src="/macs.jpeg" alt="Background" fill className="object-cover grayscale" />
+          </div>
+          {/* Gradient Overlay for Text Legibility */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-t from-zinc-950 via-zinc-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col">
+            <span className="text-yellow-500 mb-2 group-hover:scale-110 transition-transform origin-left"><Terminal className="w-5 h-5" /></span>
+            <span className="text-3xl font-bold text-zinc-100">+3</span>
+            <span className="text-sm text-zinc-500 uppercase tracking-widest mt-1">{content.hero.stats.experienceLabel}</span>
+          </div>
         </div>
-        <div className="rounded-3xl bg-zinc-900 border border-zinc-800/60 p-6 flex flex-col justify-center font-mono hover:border-yellow-500/30 transition-colors group">
-          <span className="text-yellow-500 mb-2 group-hover:scale-110 transition-transform origin-left"><GitBranch className="w-5 h-5" /></span>
-          <span className="text-3xl font-bold text-zinc-100">{content.hero.stats.subjectsNumber}</span>
-          <span className="text-sm text-zinc-500 uppercase tracking-widest mt-1">{content.hero.stats.subjectsLabel}</span>
-          <span className="text-xs text-zinc-600 mt-0.5">{content.hero.stats.subjectsSublabel}</span>
+
+        <div className="rounded-3xl bg-zinc-900 border border-zinc-800/60 p-6 flex flex-col justify-center font-mono hover:border-yellow-500/30 transition-all duration-500 group relative overflow-hidden">
+
+          {/* Mac Background Setup */}
+          <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-opacity duration-700 pointer-events-none">
+            <Image src="/macs.jpeg" alt="Background" fill className="object-cover object-bottom grayscale" />
+          </div>
+          {/* Gradient Overlay for Text Legibility */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-t from-zinc-950 via-zinc-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col">
+            <span className="text-yellow-500 mb-2 group-hover:scale-110 transition-transform origin-left"><GitBranch className="w-5 h-5" /></span>
+            <span className="text-3xl font-bold text-zinc-100">{content.hero.stats.subjectsNumber}</span>
+            <span className="text-sm text-zinc-500 uppercase tracking-widest mt-1">{content.hero.stats.subjectsLabel}</span>
+            <span className="text-xs text-zinc-600 mt-0.5">{content.hero.stats.subjectsSublabel}</span>
+          </div>
         </div>
 
       </section>
